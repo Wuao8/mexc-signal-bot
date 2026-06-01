@@ -1,12 +1,14 @@
 import requests
 import pandas as pd
 import time
+import os
 
 # ======================
 # CONFIG
 # ======================
-TOKEN = "IL_TUO_TOKEN"
-CHAT_ID = 7461254501
+
+TOKEN = os.environ.get("TOKEN")
+CHAT_ID = int(os.environ.get("CHAT_ID"))
 
 BASE_URL = f"https://api.telegram.org/bot{TOKEN}"
 
