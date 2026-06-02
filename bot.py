@@ -2,28 +2,9 @@ import requests
 import pandas as pd
 import time
 import os
-import threading
-from flask import Flask
-
-
-# ======================
-# FLASK (per Render)
-# ======================
-
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return "MEXC Signal Bot Running"
-
-
-# ======================
-# CONFIG
-# ======================
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = int(os.environ.get("CHAT_ID"))
-
 BASE_URL = f"https://api.telegram.org/bot{TOKEN}"
 
 
@@ -34,14 +15,16 @@ BASE_URL = f"https://api.telegram.org/bot{TOKEN}"
 def send_message(text):
     url = f"{BASE_URL}/sendMessage"
 
-    requests.post(
-        url,
-        data={
-            "chat_id": CHAT_ID,
-            "text": text
-        }
-    )
-
+    try:
+        requests.post(
+            url,
+            data={
+                "chat_id": CHAT_ID,
+                "text": text
+            }
+        )
+    except Exception as e:
+        print(f"Telegram error: {e}")
 
 # ======================
 # TOP 50 USDT (MEXC)
@@ -187,47 +170,18 @@ def run_scan():
     return signals
 
 
-# ======================
-# BOT LOOP
-# ======================
-
-def bot_loop():
-
-    send_message("Bot avviato correttamente")
-
-    while True:
-
-        print("Scanning market...")
-
-        results = run_scan()
-
-        if results:
-            send_message(
-                "Segnali trovati:\n" +
-                "\n".join(results)
-            )
-        else:
-            send_message("NO SIGNAL")
-
-        print("Sleeping 8h...")
-
-        time.sleep(8 * 60 * 60)
-
-
-# ======================
-# START
-# ======================
-
 if __name__ == "__main__":
+    print("Scanning market...")
 
-    threading.Thread(
-        target=bot_loop,
-        daemon=True
-    ).start()
+    results = run_scan()
 
-    port = int(os.environ.get("PORT", 10000))
+    if results:
+        send_message(
+            "Segnali trovati:\n" + "\n".join(results)
+        )
+    else:
+        send_message("NO SIGNAL")
 
-    app.run(
-        host="0.0.0.0",
-        port=port
-    )
+
+
+
