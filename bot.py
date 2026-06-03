@@ -177,12 +177,12 @@ if __name__ == "__main__":
     results = run_scan()
 
     if results:
-    send_message(
-        "🚨 Segnali trovati:\n" + "\n".join(results)
-    )
-    print(f"Signals found: {results}")
-else:
-    print("No signals found - silent run")
+        send_message(
+            "🚨 Segnali trovati:\n" + "\n".join(results)
+        )
+        print(f"Signals found: {results}")
+    else:
+        print("No signals found - silent run")
 
 
 
