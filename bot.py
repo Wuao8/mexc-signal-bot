@@ -161,7 +161,7 @@ def check_signal(df):
 # ======================
 
 def run_scan():
-    symbols = get_top_50_usdt()
+    symbols = get_top_300_usdt()
 
     signals = []
 
